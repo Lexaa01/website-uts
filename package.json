@@ -1,0 +1,30 @@
+{
+  "name": "tugas-web",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000w\u0000e\u0000b\u0000s\u0000i\u0000t\u0000e\u0000-\u0000u\u0000t\u0000s\u0000\r\u0000 \u0000",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lexaa01/website-uts.git"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lexaa01/website-uts/issues"
+  },
+  "homepage": "https://github.com/Lexaa01/website-uts#readme",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.17",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "pino": "^9.7.0",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0"
+  }
+}

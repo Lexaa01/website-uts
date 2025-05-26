@@ -198,7 +198,7 @@
           <li>
             <i class="bx bxs-map"></i> Jl. Leang Pettae, Maros, Sulawesi Selatan
           </li>
-          <li><i class="bx bxs-phone"></i> 08789441316</li>
+          <li><i class="bx bxs-phone"></i> 087894413167</li>
         </ul>
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3027.6552416122768!2d119.67178567353669!3d-4.978194950803647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbe58a1f487be7d%3A0xacf57316e2c82bb0!2sTaman%20Arkeologi%20Leang%20Leang!5e1!3m2!1sid!2sid!4v1748147912195!5m2!1sid!2sid"
@@ -223,11 +223,15 @@
       </div>
 
       <div class="contact-form">
-        <form action="">
-          <input type="text" placeholder="Name" required />
-          <input type="email" placeholder="Email" required />
-          <input type="text" placeholder="Nomor tlpn/WA" />
-          <textarea placeholder="Pesan (Opsional)" required></textarea>
+        <form id="contactForm">
+          <input type="text" name="name" placeholder="Name" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <input type="text" name="phone" placeholder="Nomor tlpn/WA" />
+          <textarea
+            name="message"
+            placeholder="Pesan (Opsional)"
+            required
+          ></textarea>
           <input type="submit" value="Submit" class="send" />
         </form>
       </div>
@@ -236,5 +240,56 @@
       <p>developed by kelompok 2</p>
     </div>
     <a href="#" class="top"><i class="bx bx-up-arrow-alt"></i></a>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData.entries());
+
+          try {
+            const response = await fetch(
+              "http://localhost:3000/api/send-message",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              }
+            );
+            console.log(response);
+
+            if (response.status === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Pesan berhasil dikirim.",
+                confirmButtonText: "OK",
+              });
+              this.reset();
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Gagal!",
+                text: "Terjadi kesalahan saat mengirim pesan.",
+                confirmButtonText: "Coba lagi",
+              });
+            }
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Error!",
+              text: "Tidak dapat terhubung ke server.",
+              confirmButtonText: "Mengerti",
+            });
+            console.error(error);
+          }
+        });
+    </script>
   </body>
 </html>

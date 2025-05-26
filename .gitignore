@@ -1,0 +1,27 @@
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv file (jangan upload config sensitif)
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# Vercel
+.vercel/
+
+# IDE / Editor config
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
