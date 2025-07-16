@@ -305,8 +305,6 @@
           }
         });
 
-      let selectedRating = 0;
-
       // Simulasi login
       function login() {
         localStorage.setItem("user_logged_in", "true");
@@ -318,7 +316,8 @@
         alert("Logout berhasil!");
       }
 
-      // Buat bintang rating secara dinamis
+      let selectedRating = 0;
+
       function createStars() {
         const starsContainer = document.getElementById("stars");
         for (let i = 1; i <= 5; i++) {
@@ -329,17 +328,6 @@
         }
       }
 
-      createStars();
-
-      // Event klik bintang
-      document.getElementById("stars").addEventListener("click", function (e) {
-        if (e.target.tagName === "SPAN") {
-          selectedRating = parseInt(e.target.dataset.value);
-          updateStarDisplay(selectedRating);
-        }
-      });
-
-      // Update tampilan bintang
       function updateStarDisplay(rating) {
         const stars = document.querySelectorAll("#stars span");
         stars.forEach((star, index) => {
@@ -347,44 +335,78 @@
         });
       }
 
-      // Event kirim review
-      document
-        .getElementById("submitReview")
-        .addEventListener("click", function () {
-          const reviewText = document.getElementById("reviewText").value.trim();
-          const reviewMsg = document.getElementById("reviewMsg");
+      function loadReviews() {
+        const reviewList = document.getElementById("reviewList");
+        const stored = localStorage.getItem("reviews");
+        const reviews = stored ? JSON.parse(stored) : [];
 
-          const isLoggedIn = localStorage.getItem("user_logged_in") === "true";
-
-          if (!isLoggedIn) {
-            reviewMsg.innerText =
-              "Silakan login terlebih dahulu untuk mengirim review.";
-            return;
-          }
-
-          if (selectedRating === 0 || reviewText === "") {
-            reviewMsg.innerText = "Rating dan review harus diisi.";
-            return;
-          }
-
-          // Tampilkan review
-          const reviewList = document.getElementById("reviewList");
+        reviewList.innerHTML = ""; // Clear before repopulate
+        reviews.reverse().forEach((rev) => {
           const reviewItem = document.createElement("div");
           reviewItem.className = "review-item";
           reviewItem.innerHTML = `
-    <p>Rating: ${"★".repeat(selectedRating)}${"☆".repeat(
-            5 - selectedRating
-          )}</p>
-    <p>${reviewText}</p>
-  `;
-          reviewList.prepend(reviewItem);
-
-          // Reset form
-          document.getElementById("reviewText").value = "";
-          reviewMsg.innerText = "";
-          selectedRating = 0;
-          updateStarDisplay(0);
+      <p>Rating: ${"★".repeat(rev.rating)}${"☆".repeat(5 - rev.rating)}</p>
+      <p>${rev.text}</p>
+    `;
+          reviewList.appendChild(reviewItem);
         });
+      }
+
+      function saveReview(rating, text) {
+        const stored = localStorage.getItem("reviews");
+        const reviews = stored ? JSON.parse(stored) : [];
+
+        reviews.push({ rating, text, createdAt: new Date().toISOString() });
+
+        localStorage.setItem("reviews", JSON.stringify(reviews));
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        createStars();
+        loadReviews();
+
+        document.getElementById("stars").addEventListener("click", (e) => {
+          if (e.target.tagName === "SPAN") {
+            selectedRating = parseInt(e.target.dataset.value);
+            updateStarDisplay(selectedRating);
+          }
+        });
+
+        document
+          .getElementById("submitReview")
+          .addEventListener("click", () => {
+            const reviewText = document
+              .getElementById("reviewText")
+              .value.trim();
+            const reviewMsg = document.getElementById("reviewMsg");
+
+            const isLoggedIn =
+              localStorage.getItem("user_logged_in") === "true";
+
+            if (!isLoggedIn) {
+              reviewMsg.innerText =
+                "Silakan login terlebih dahulu untuk mengirim review.";
+              return;
+            }
+
+            if (selectedRating === 0 || reviewText === "") {
+              reviewMsg.innerText = "Rating dan review harus diisi.";
+              return;
+            }
+
+            // Simpan review ke localStorage
+            saveReview(selectedRating, reviewText);
+
+            // Reset form
+            document.getElementById("reviewText").value = "";
+            selectedRating = 0;
+            updateStarDisplay(0);
+            reviewMsg.innerText = "";
+
+            // Muat ulang daftar review
+            loadReviews();
+          });
+      });
     </script>
   </body>
 </html>
