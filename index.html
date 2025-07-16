@@ -19,9 +19,8 @@
         <a href="#about" style="--i: 2">About</a>
         <a href="#services" style="--i: 3">Point</a>
         <a href="#project" style="--i: 4">Dokumentasi</a>
-        <a href="/login.html">
-          <button class="login-btn">Login</button>
-        </a>
+        <button onclick="login()">Login (Simulasi)</button>
+        <button onclick="logout()">Logout</button>
       </nav>
     </header>
     <section class="home">
@@ -181,6 +180,22 @@
       </div>
     </div>
 
+    <div class="review-section">
+      <h2>Berikan Reviewmu</h2>
+
+      <div id="stars" class="stars"></div>
+      <textarea
+        id="reviewText"
+        placeholder="Tulis pengalamanmu di sini..."
+      ></textarea>
+      <button id="submitReview">Kirim Review</button>
+      <p id="reviewMsg" class="error-message"></p>
+
+      <hr />
+      <h3>Review Pengguna</h3>
+      <div id="reviewList"></div>
+    </div>
+
     <section class="contact" id="contact">
       <div class="contact-text">
         <h2>Contact <span>Me</span></h2>
@@ -287,6 +302,87 @@
             });
             console.error(error);
           }
+        });
+
+      let selectedRating = 0;
+
+      // Simulasi login
+      function login() {
+        localStorage.setItem("user_logged_in", "true");
+        alert("Login berhasil!");
+      }
+
+      function logout() {
+        localStorage.removeItem("user_logged_in");
+        alert("Logout berhasil!");
+      }
+
+      // Buat bintang rating secara dinamis
+      function createStars() {
+        const starsContainer = document.getElementById("stars");
+        for (let i = 1; i <= 5; i++) {
+          const star = document.createElement("span");
+          star.innerText = "☆";
+          star.dataset.value = i;
+          starsContainer.appendChild(star);
+        }
+      }
+
+      createStars();
+
+      // Event klik bintang
+      document.getElementById("stars").addEventListener("click", function (e) {
+        if (e.target.tagName === "SPAN") {
+          selectedRating = parseInt(e.target.dataset.value);
+          updateStarDisplay(selectedRating);
+        }
+      });
+
+      // Update tampilan bintang
+      function updateStarDisplay(rating) {
+        const stars = document.querySelectorAll("#stars span");
+        stars.forEach((star, index) => {
+          star.innerText = index < rating ? "★" : "☆";
+        });
+      }
+
+      // Event kirim review
+      document
+        .getElementById("submitReview")
+        .addEventListener("click", function () {
+          const reviewText = document.getElementById("reviewText").value.trim();
+          const reviewMsg = document.getElementById("reviewMsg");
+
+          const isLoggedIn = localStorage.getItem("user_logged_in") === "true";
+
+          if (!isLoggedIn) {
+            reviewMsg.innerText =
+              "Silakan login terlebih dahulu untuk mengirim review.";
+            return;
+          }
+
+          if (selectedRating === 0 || reviewText === "") {
+            reviewMsg.innerText = "Rating dan review harus diisi.";
+            return;
+          }
+
+          // Tampilkan review
+          const reviewList = document.getElementById("reviewList");
+          const reviewItem = document.createElement("div");
+          reviewItem.className = "review-item";
+          reviewItem.innerHTML = `
+    <p>Rating: ${"★".repeat(selectedRating)}${"☆".repeat(
+            5 - selectedRating
+          )}</p>
+    <p>${reviewText}</p>
+  `;
+          reviewList.prepend(reviewItem);
+
+          // Reset form
+          document.getElementById("reviewText").value = "";
+          reviewMsg.innerText = "";
+          selectedRating = 0;
+          updateStarDisplay(0);
         });
     </script>
   </body>
