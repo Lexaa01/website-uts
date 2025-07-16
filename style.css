@@ -160,7 +160,7 @@ header {
 }
 
 #about {
-/* background-color: #ff004f; */
+  /* background-color: #ff004f; */
   background: #081b29;
   color: aliceblue;
   font-size: 20px;
@@ -777,4 +777,17 @@ section {
   background: #0ef;
   padding: 10px;
   border-radius: 0.5rem;
+}
+
+.btn-login {
+  padding: 8px 16px;
+  background-color: #0072ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.btn-login:hover {
+  background-color: #005bd1;
 }
