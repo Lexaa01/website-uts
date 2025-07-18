@@ -20,9 +20,12 @@
   "homepage": "https://github.com/Lexaa01/website-uts#readme",
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.17",
+    "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.3",
     "pino": "^9.7.0",
     "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0"

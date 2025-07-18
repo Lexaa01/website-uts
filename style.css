@@ -159,6 +159,25 @@ header {
     0 0 200px cyan;
 }
 
+#authBtn {
+  margin-left: 35px;
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  background-color: #0072ff;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  animation: slideTop 0.5s ease forwards;
+  animation-delay: calc(0.2 * var(--i));
+}
+
+#authBtn:hover {
+  background-color: #005bd1;
+}
+
 #about {
   /* background-color: #ff004f; */
   background: #081b29;
@@ -819,6 +838,7 @@ section {
 .review-container h2,
 .review-container h3 {
   text-align: center;
+  margin-top: 20px;
   margin-bottom: 20px;
   color: #333;
 }
@@ -887,7 +907,19 @@ button#submitReview:hover {
 .review-item p {
   margin: 6px 0;
 }
+
 /* === Komponen Login === */
+
+.review-avr {
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 600px;
+  margin: 30px auto;
+  justify-content: center;
+  text-align: center;
+}
+
 .login-container {
   max-width: 400px;
   margin: 50px auto;
@@ -899,6 +931,7 @@ button#submitReview:hover {
 
 .login-container h2 {
   text-align: center;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -934,4 +967,90 @@ button#submitReview:hover {
 
 .login-container button:hover {
   background-color: #005bd1;
+}
+
+/* === Slider Review === */
+.slider-wrapper {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.slide-container {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+  width: 100%;
+}
+
+.review-slide {
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+}
+
+.slider-dots {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.slider-dots .dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  background-color: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.slider-dots .dot.active {
+  background-color: #0072ff;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 25px 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #0072ff;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #333;
+}
+
+.login-container p {
+  margin: 6px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
 }

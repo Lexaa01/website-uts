@@ -19,8 +19,7 @@
         <a href="#about" style="--i: 2">About</a>
         <a href="#services" style="--i: 3">Point</a>
         <a href="#project" style="--i: 4">Dokumentasi</a>
-        <button onclick="login()">Login (Simulasi)</button>
-        <button onclick="logout()">Logout</button>
+        <button id="authBtn"></button>
       </nav>
     </header>
     <section class="home">
@@ -235,6 +234,10 @@
       </div>
     </section>
 
+    <div class="review-avr">
+      <h3 id="averageRating">Rating rata-rata: Belum ada</h3>
+    </div>
+
     <div class="review-container">
       <h2>Berikan Reviewmu</h2>
 
@@ -248,7 +251,10 @@
 
       <hr />
       <h3>Review Pengguna</h3>
-      <div id="reviewList"></div>
+      <div id="reviewSlider" class="slider-wrapper">
+        <div id="reviewSlides" class="slide-container"></div>
+        <div id="sliderDots" class="slider-dots"></div>
+      </div>
     </div>
 
     <div class="last-text">
@@ -336,20 +342,80 @@
       }
 
       function loadReviews() {
-        const reviewList = document.getElementById("reviewList");
+        const reviewSlides = document.getElementById("reviewSlides");
+        const sliderDots = document.getElementById("sliderDots");
         const stored = localStorage.getItem("reviews");
         const reviews = stored ? JSON.parse(stored) : [];
 
-        reviewList.innerHTML = ""; // Clear before repopulate
-        reviews.reverse().forEach((rev) => {
-          const reviewItem = document.createElement("div");
-          reviewItem.className = "review-item";
-          reviewItem.innerHTML = `
-      <p>Rating: ${"★".repeat(rev.rating)}${"☆".repeat(5 - rev.rating)}</p>
-      <p>${rev.text}</p>
-    `;
-          reviewList.appendChild(reviewItem);
+        const grouped = [];
+        for (let i = 0; i < reviews.length; i += 5) {
+          grouped.push(reviews.slice(i, i + 5));
+        }
+
+        reviewSlides.innerHTML = "";
+        sliderDots.innerHTML = "";
+
+        grouped.forEach((group, index) => {
+          const slide = document.createElement("div");
+          slide.className = "review-slide";
+
+          group.forEach((rev) => {
+            const reviewItem = document.createElement("div");
+            reviewItem.className = "review-item";
+            reviewItem.innerHTML = `
+        <p>Rating: ${"★".repeat(rev.rating)}${"☆".repeat(5 - rev.rating)}</p>
+        <p>${rev.text}</p>
+      `;
+            slide.appendChild(reviewItem);
+          });
+
+          reviewSlides.appendChild(slide);
+
+          // Buat titik navigasi
+          const dot = document.createElement("span");
+          dot.className = "dot";
+          if (index === 0) dot.classList.add("active");
+          dot.dataset.slide = index;
+          sliderDots.appendChild(dot);
         });
+
+        setActiveSlide(0);
+
+        // Event: klik titik
+        sliderDots.querySelectorAll(".dot").forEach((dot) => {
+          dot.addEventListener("click", () => {
+            const slideIndex = parseInt(dot.dataset.slide);
+            setActiveSlide(slideIndex);
+          });
+        });
+      }
+
+      function setActiveSlide(index) {
+        const reviewSlides = document.getElementById("reviewSlides");
+        const dots = document.querySelectorAll(".slider-dots .dot");
+
+        // Geser slide ke posisi yang dipilih
+        reviewSlides.style.transform = `translateX(-${index * 100}%)`;
+
+        // Update dot aktif
+        dots.forEach((dot) => dot.classList.remove("active"));
+        if (dots[index]) dots[index].classList.add("active");
+      }
+
+      function updateAverageRating() {
+        const stored = localStorage.getItem("reviews");
+        const reviews = stored ? JSON.parse(stored) : [];
+
+        const total = reviews.reduce((sum, r) => sum + r.rating, 0);
+        const avg =
+          reviews.length > 0 ? (total / reviews.length).toFixed(1) : null;
+
+        const output = document.getElementById("averageRating");
+        if (avg) {
+          output.innerText = `⭐ ${avg} dari 5 (${reviews.length} ulasan)`;
+        } else {
+          output.innerText = `Rating rata-rata: Belum ada`;
+        }
       }
 
       function saveReview(rating, text) {
@@ -364,6 +430,7 @@
       document.addEventListener("DOMContentLoaded", () => {
         createStars();
         loadReviews();
+        updateAverageRating();
 
         document.getElementById("stars").addEventListener("click", (e) => {
           if (e.target.tagName === "SPAN") {
@@ -405,8 +472,29 @@
 
             // Muat ulang daftar review
             loadReviews();
+            updateAverageRating();
           });
       });
+
+      const authBtn = document.getElementById("authBtn");
+
+      const isLoggedIn = !!localStorage.getItem("auth_token");
+      const username = localStorage.getItem("username");
+
+      if (isLoggedIn) {
+        authBtn.textContent = `Logout (${username})`;
+        authBtn.onclick = () => {
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("username");
+          alert("Berhasil logout");
+          location.reload(); // refresh halaman
+        };
+      } else {
+        authBtn.textContent = "Login";
+        authBtn.onclick = () => {
+          window.location.href = "/login.html";
+        };
+      }
     </script>
   </body>
 </html>
