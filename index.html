@@ -273,6 +273,19 @@
           const data = Object.fromEntries(formData.entries());
 
           try {
+            const isLoggedIn =
+              localStorage.getItem("user_logged_in") === "true";
+
+            if (!isLoggedIn) {
+              Swal.fire({
+                icon: "error",
+                title: "Gagal!",
+                text: "Anda harus login terlebih dahulu.",
+                confirmButtonText: "Mengerti",
+              });
+              return;
+            }
+
             const response = await fetch(
               "https://lxcloud.web.id/api/send-message",
               {
