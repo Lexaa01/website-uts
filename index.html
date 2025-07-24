@@ -485,13 +485,13 @@
 
       const authBtn = document.getElementById("authBtn");
 
-      const isLoggedIn = !!localStorage.getItem("auth_token");
+      const isLoggedIn = !!localStorage.getItem("user_logged_in");
       const username = localStorage.getItem("username");
 
       if (isLoggedIn) {
         authBtn.textContent = `Logout (${username})`;
         authBtn.onclick = () => {
-          localStorage.removeItem("auth_token");
+          localStorage.removeItem("user_logged_in");
           localStorage.removeItem("username");
           alert("Berhasil logout");
           location.reload(); // refresh halaman
