@@ -57,10 +57,7 @@
               error.textContent = data.message;
               alert(data.message);
             } else {
-              // Auto login dan redirect
-              localStorage.setItem("user_logged_in", "true");
-              localStorage.setItem("username", username);
-              window.location.href = "/index.html";
+              window.location.href = "/login.html";
               alert("Registrasi berhasil!");
             }
           } catch (err) {
